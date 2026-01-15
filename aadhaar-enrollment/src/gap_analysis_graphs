@@ -1,0 +1,29 @@
+#prepare data for graphs
+
+import matplotlib.pyplot as plt
+
+# Take top 10 districts with highest gaps
+top_gap = high_gap.head(10)
+
+# Create a combined district label
+top_gap["region"] = top_gap["state"] + " - " + top_gap["district"]
+
+#GRAPH 1 – CHILD AGE GROUP GAP (5–17)
+plt.figure()
+plt.barh(top_gap["region"], top_gap["gap_5_17"])
+plt.xlabel("Aadhaar Enrolment Gap (Age 5–17)")
+plt.ylabel("District")
+plt.title("Top Districts with Aadhaar Enrolment Gap (Age 5–17)")
+plt.tight_layout()
+plt.show()
+
+#GRAPH 2 – ADULT AGE GROUP GAP (18+)
+plt.figure()
+plt.barh(top_gap["region"], top_gap["gap_18_plus"])
+plt.xlabel("Aadhaar Enrolment Gap (Age 18+)")
+plt.ylabel("District")
+plt.title("Top Districts with Aadhaar Enrolment Gap (Age 18+)")
+plt.tight_layout()
+plt.show()
+
+#first run gap_analyse by changing path use cleaned csv's then run this graph code
