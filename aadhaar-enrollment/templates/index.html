@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aadhaar Enrollment Gap Risk Assessment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png") no-repeat center;
+      background-size: 500px;
+      background-color: #0c1f3f;
+      color: #ffffff;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 31, 63, 0.88);
+      backdrop-filter: blur(6px);
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    header h1 span {
+      color: #ffb703;
+    }
+
+    header p {
+      margin-top: 10px;
+      color: #d6e0f0;
+      font-size: 16px;
+    }
+
+    /* Form Card */
+    .form-card {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 15px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 15px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff7a18, #ffb703);
+      color: #1a1a1a;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Results */
+    .results {
+      display: none;
+      margin-top: 30px;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .card {
+      padding: 25px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .score-card {
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+    }
+
+    .risk-card {
+      background: linear-gradient(135deg, #b00020, #d32f2f);
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .score {
+      font-size: 52px;
+      font-weight: 700;
+    }
+
+    .level {
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    /* Info Section */
+    .info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      margin-top: 40px;
+      gap: 20px;
+      color: #e0e6f0;
+    }
+
+    .info-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .info-box h4 {
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .info-box p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header>
+      <h1>Aadhaar Enrollment Gap <span>Risk Assessment</span></h1>
+      <p>Assess future Aadhaar enrolment risks across Indian districts</p>
+    </header>
+
+    <div class="form-card">
+      <div class="form-group">
+        <label>State</label>
+        <input type="text" id="state" placeholder="Enter State">
+      </div>
+
+      <div class="form-group">
+        <label>District</label>
+        <input type="text" id="district" placeholder="Enter District">
+      </div>
+
+      <div class="form-group">
+        <label>Pincode</label>
+        <input type="number" id="pincode" placeholder="Enter Pincode">
+      </div>
+
+      <button onclick="calculateRisk()">Check Risk Score</button>
+
+      <div class="results" id="results">
+        <div class="card score-card">
+          <h3>Risk Score</h3>
+          <div class="score" id="score">0</div>
+          <div class="level" id="scoreText">---</div>
+        </div>
+
+        <div class="card risk-card">
+          <h3>Risk Level</h3>
+          <div class="level" id="riskLevel">---</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="info-box">
+        <h4>Enrollment Analysis</h4>
+        <p>Identify future Aadhaar enrollment gaps</p>
+      </div>
+      <div class="info-box">
+        <h4>Plan Proactively</h4>
+        <p>Enable early administrative interventions</p>
+      </div>
+      <div class="info-box">
+        <h4>Data-Driven Insights</h4>
+        <p>Support evidence-based policy planning</p>
+      </div>
+    </div>
+
+    <footer>
+      © UIDAI · Government of India (Prototype Interface)
+    </footer>
+
+  </div>
+
+  <script>
+    async function calculateRisk() {
+      const state = document.getElementById("state").value.trim();
+      const district = document.getElementById("district").value.trim();
+      const pincode = document.getElementById("pincode").value.trim();
+
+      if (!state || !district || !pincode) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      try {
+        const response = await fetch("/get-risk", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            state: state,
+            district: district,
+            pincode: pincode
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.error || "Unable to fetch risk score");
+          return;
+        }
+
+        document.getElementById("score").innerText = data.risk_score;
+        document.getElementById("scoreText").innerText = data.score_text;
+        document.getElementById("riskLevel").innerText = data.risk_level;
+
+        document.getElementById("results").style.display = "grid";
+
+      } catch (error) {
+        console.error(error);
+        alert("Server error. Please try again later.");
+      }
+    }
+  </script>
+
+</body>
+</html>

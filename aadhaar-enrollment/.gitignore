@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+myenv/
+*.sqlite3
+
+# Data
+data/processed/*.csv
+
+# Jupyter
+.ipynb_checkpoints/
